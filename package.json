@@ -1,0 +1,23 @@
+{
+  "name": "divine-player-swf",
+  "description": "A very simple HTML5 video player that degrades to Flash if necessary",
+  "version": "0.0.0",
+  "authors": [
+    "Cameron Hunter <hello@cameronhunter.co.uk>"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-bump": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-exec": "latest",
+    "matchdep": "latest"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
