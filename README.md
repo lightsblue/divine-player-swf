@@ -16,7 +16,13 @@ npm install && bower install
 
 3. Install [Flex SDK](http://sourceforge.net/adobe/flexsdk/wiki/Flex SDK/) and add it to your `PATH`
 
-4. Build the project to check that everything works:
+4. Build the project to check that everything works
 ```
 grunt build
 ```
+
+## Building
+You can build the project using `grunt build`. This creates a `release` folder containing the compiled SWF.
+
+## Testing
+Testing is currently performed in [divine-player](https://github.com/cameronhunter/divine-player) – hopefully this will change soon.
