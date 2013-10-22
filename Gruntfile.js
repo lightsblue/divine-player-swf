@@ -61,24 +61,4 @@ module.exports = function(grunt) {
     'copy:swf',
     'clean:temp'
   ]);
-
-  grunt.registerTask('release', [
-    'build',
-    'bump'
-  ]);
-
-  grunt.registerTask('release:patch', [
-    'build',
-    'bump:patch'
-  ]);
-
-  grunt.registerTask('release:minor', [
-    'build',
-    'bump:minor'
-  ]);
-
-  grunt.registerTask('release:major', [
-    'build',
-    'bump:major'
-  ]);
 };
