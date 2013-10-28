@@ -60,6 +60,10 @@ package {
       }
     }
 
+    private function currentTime(offset:Number): void {
+      stream.seek(offset);
+    }
+
     private function play(): void {
       videoPlaying = true;
       stream.resume();
@@ -89,6 +93,7 @@ package {
     }
 
     private function registerExternalMethods(): void {
+      ExternalInterface.addCallback("divineCurrentTime", currentTime);
       ExternalInterface.addCallback("divinePlay", play);
       ExternalInterface.addCallback("divinePause", pause);
       ExternalInterface.addCallback("divinePaused", isPaused);
@@ -143,6 +148,13 @@ package {
       addChildAt(video, 1);
 
       stream = new NetStream(connection);
+      stream.client = {};
+      stream.client.onMetaData = function(infoObject:Object): void {
+        if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number) {
+          var onDuration: String = loaderInfo.parameters.onDuration;
+          ExternalInterface.call(onDuration, infoObject["duration"]);
+        }
+      };
       stream.bufferTime = 0.5;
       stream.soundTransform = new SoundTransform(muted ? 0 : 1);
       stream.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
