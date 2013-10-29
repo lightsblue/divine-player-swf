@@ -64,6 +64,10 @@ package {
       stream.seek(offset);
     }
 
+    private function getCurrentTime(): Number {
+      return stream.time;
+    }
+
     private function play(): void {
       videoPlaying = true;
       stream.resume();
@@ -94,6 +98,7 @@ package {
 
     private function registerExternalMethods(): void {
       ExternalInterface.addCallback("divineCurrentTime", currentTime);
+      ExternalInterface.addCallback("divineGetCurrentTime", getCurrentTime);
       ExternalInterface.addCallback("divinePlay", play);
       ExternalInterface.addCallback("divinePause", pause);
       ExternalInterface.addCallback("divinePaused", isPaused);
