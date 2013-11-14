@@ -55,9 +55,13 @@ package {
 
       loadVideo();
 
-      if (loaderInfo.parameters.onReady) {
+      if (allow(loaderInfo.parameters.onReady)) {
         ExternalInterface.call(loaderInfo.parameters.onReady);
       }
+    }
+
+    private function allow(fnName: String): Boolean {
+      return /^[a-z0-9_]+$/i.test(fnName);
     }
 
     private function play(): void {
@@ -159,7 +163,7 @@ package {
 
     private function throwError(code: int, description: String): void {
       var onError: String = loaderInfo.parameters.onError;
-      if (onError) {
+      if (allow(onError)) {
         ExternalInterface.call(onError, code, description);
       }
     }
