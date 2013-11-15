@@ -17,6 +17,8 @@ package {
   [SWF(backgroundColor="0x000000")]
   public class Player extends Sprite {
 
+    private var callbackId: String;
+
     private var posterUrl: String;
     private var videoUrl: String;
     private var loop: Boolean;
@@ -55,13 +57,21 @@ package {
 
       loadVideo();
 
-      if (allow(loaderInfo.parameters.onReady)) {
-        ExternalInterface.call(loaderInfo.parameters.onReady);
+      if (allow(loaderInfo.parameters.callbackId)) {
+        callbackId = loaderInfo.parameters.callbackId;
+      }
+
+      if (callbackId) {
+        ExternalInterface.call(callback("onReady"));
       }
     }
 
-    private function allow(fnName: String): Boolean {
-      return /^[a-z0-9_]+$/i.test(fnName);
+    private function callback(name: String): String {
+      return ["divinePlayer", name, callbackId].join("_");
+    }
+
+    private function allow(callbackId: String): Boolean {
+      return /^[0-9]+$/i.test(callbackId);
     }
 
     private function play(): void {
@@ -162,9 +172,8 @@ package {
     }
 
     private function throwError(code: int, description: String): void {
-      var onError: String = loaderInfo.parameters.onError;
-      if (allow(onError)) {
-        ExternalInterface.call(onError, code, description);
+      if (callbackId) {
+        ExternalInterface.call(callback("onError"), code, description);
       }
     }
 
