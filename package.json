@@ -10,6 +10,7 @@
     "grunt": "~0.4.1",
     "grunt-bump": "latest",
     "grunt-contrib-clean": "latest",
+    "grunt-contrib-connect": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-exec": "latest",
     "matchdep": "latest"
