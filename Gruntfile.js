@@ -57,7 +57,7 @@ module.exports = function(grunt) {
       build_tests: {
         cmd: [
           'mxmlc',
-          '<%= test %>/Runner.as',
+          '<%= test %>/unit/Runner.as',
           '-output <%= temp %>/divine-player-tests.swf',
           '-source-path+=<%= source %>',
           '-source-path+=lib/as3/src',
@@ -105,6 +105,7 @@ module.exports = function(grunt) {
     'clean:temp',
     'exec:build_tests',
     'copy:swf',
+    'clean:temp',
     'connect:tests'
   ]);
 };
