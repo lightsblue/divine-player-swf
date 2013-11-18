@@ -77,11 +77,12 @@ module.exports = function(grunt) {
         hostname: "*",
         port: 9001,
         keepalive: true,
-        open: "http://localhost:<%= connect.options.port %>/divine-player-tests.swf"
+        open: "http://localhost:<%= connect.options.port %>"
       },
       tests: {
         options: {
           base: [
+            "<%= test %>/integration",
             "<%= release %>"
           ]
         }
