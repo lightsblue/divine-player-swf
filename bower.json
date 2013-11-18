@@ -10,6 +10,7 @@
     ".travis.yml",
     "Gruntfile.js",
     "package.json",
+    "release/divine-player-tests.swf",
     "src/",
     "test/"
   ]
