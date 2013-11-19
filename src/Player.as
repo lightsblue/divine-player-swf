@@ -39,7 +39,9 @@ package {
     }
 
     private function onReady(): void {
-      ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onReady"].join("_"));
+      if (isSafe(ExternalInterface.objectID)) {
+        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onReady"].join("_"));
+      }
     }
 
     private function registerJavaScriptAPI(video: Video): void {
@@ -49,6 +51,10 @@ package {
       ExternalInterface.addCallback("divineMute", video.mute);
       ExternalInterface.addCallback("divineUnmute", video.unmute);
       ExternalInterface.addCallback("divineMuted", video.isMuted);
+    }
+
+    private function isSafe(value: String): Boolean {
+      return /^[0-9A-Z]+$/i.test(value);
     }
   }
 }
