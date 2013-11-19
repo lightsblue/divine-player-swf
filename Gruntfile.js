@@ -98,16 +98,13 @@ module.exports = function(grunt) {
     'exec:check_for_mxmlc',
     'clean:swf',
     'exec:build_swf',
+    'exec:build_tests',
     'copy:swf',
     'clean:temp'
   ]);
 
   grunt.registerTask('test', [
-    'exec:check_for_mxmlc',
-    'clean:temp',
-    'exec:build_tests',
-    'copy:swf',
-    'clean:temp',
+    'build',
     'connect:tests'
   ]);
 };
