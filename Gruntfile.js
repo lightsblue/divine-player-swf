@@ -50,6 +50,7 @@ module.exports = function(grunt) {
           'mxmlc',
           '<%= source %>/Player.as',
           '-output <%= temp %>/divine-player.swf',
+          '-source-path+=<%= source %>',
           '-load-config=flex-config.xml'
         ].join(' ')
       },
