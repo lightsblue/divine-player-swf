@@ -39,14 +39,54 @@ module.exports = function(grunt) {
           }
         }
       },
+
+      /**
+       * mxmlc produces a different SWF, even when the source has not changed.
+       * This is because the binary includes the compilation timestamp. Unfortunately
+       * there's nothing that can be done to prevent it.
+       */
       build_swf: {
-        cmd: 'mxmlc <%= source %>/Player.as -o <%= temp %>/divine-player.swf -use-network=false -static-link-runtime-shared-libraries=true'
+        cmd: [
+          'mxmlc',
+          '<%= source %>/Player.as',
+          '--output <%= temp %>/divine-player.swf',
+          '--source-path+=<%= source %>',
+          '--load-config=flex-config.xml'
+        ].join(' ')
+      },
+
+      build_tests: {
+        cmd: [
+          'mxmlc',
+          '<%= test %>/unit/Runner.as',
+          '--output <%= temp %>/divine-player-tests.swf',
+          '--source-path+=<%= source %>',
+          '--source-path+=lib/as3/src',
+          '--load-config=flex-config.xml'
+        ].join(' ')
       }
     },
 
     copy: {
       swf: {
         files: [{expand: true, cwd: '<%= temp %>', src: '*', dest: '<%= release %>', filter: 'isFile'}]
+      }
+    },
+
+    connect: {
+      options: {
+        hostname: "*",
+        port: 9001,
+        keepalive: true,
+        open: "http://localhost:<%= connect.options.port %>"
+      },
+      tests: {
+        options: {
+          base: [
+            "<%= test %>/integration",
+            "<%= release %>"
+          ]
+        }
       }
     }
 
@@ -58,7 +98,13 @@ module.exports = function(grunt) {
     'exec:check_for_mxmlc',
     'clean:swf',
     'exec:build_swf',
+    'exec:build_tests',
     'copy:swf',
     'clean:temp'
+  ]);
+
+  grunt.registerTask('test', [
+    'build',
+    'connect:tests'
   ]);
 };

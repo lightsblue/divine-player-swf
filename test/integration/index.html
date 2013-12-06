@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Divine Player SWF</title>
+</head>
+<body>
+
+  <object id="player" type="application/x-shockwave-flash" data="/divine-player.swf" width="600" height="600">
+    <param name="movie" value="/divine-player.swf" />
+    <param name="allowScriptAccess" value="always" />
+    <param name="allowNetworking" value="all" />
+    <param name="wmode" value="opaque" />
+    <param name="quality" value="high" />
+    <param name="flashvars" value="width=600&amp;height=600&amp;autoplay=true&amp;muted=true&amp;loop=true&amp;poster=http%3A%2F%2Fv.cdn.vine.co%2Fv%2Fthumbs%2F2013%2F05%2F06%2F77B65BC0-7D9C-4C62-B94E-C4CDF7A2AE36-10636-000003939E707C90_1.1.mp4.jpg%3FversionId%3D8YIqyxEBZFLeqfieXspMsvVgAGyloJxs&amp;video=https%3A%2F%2Fv.cdn.vine.co%2Fv%2Fvideos%2F77B65BC0-7D9C-4C62-B94E-C4CDF7A2AE36-10636-000003939E707C90_1.1.mp4%3FversionId%3DdPfhRw7yHLzWOGxAdIHJhb.CBdOdadz.&amp;callbackId=1384751557604">
+  </object>
+
+  <object type="application/x-shockwave-flash" data="/divine-player-tests.swf" width="600" height="600">
+    <param name="movie" value="/divine-player-tests.swf" />
+    <param name="allowScriptAccess" value="always" />
+    <param name="allowNetworking" value="all" />
+    <param name="wmode" value="opaque" />
+    <param name="quality" value="high" />
+  </object>
+
+  <div>
+    <button id="play">Play</button>
+    <button id="pause">Pause</button>
+    <button id="mute">Mute</button>
+    <button id="unmute">Unmute</button>
+  </div>
+
+  <script type="text/javascript">
+    (function() {
+      var player = document.getElementById("player");
+
+      var play = document.getElementById("play").addEventListener("click", function() {
+        player.divinePlay();
+      }, false);
+
+      var pause = document.getElementById("pause").addEventListener("click", function() {
+        player.divinePause();
+      }, false);
+
+      var mute = document.getElementById("mute").addEventListener("click", function() {
+        player.divineMute();
+      }, false);
+
+      var unmute = document.getElementById("unmute").addEventListener("click", function() {
+        player.divineUnmute();
+      }, false);
+    }());
+  </script>
+
+</body>
+</html>

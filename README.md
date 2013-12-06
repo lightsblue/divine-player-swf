@@ -25,4 +25,11 @@ grunt build
 You can build the project using `grunt build`. This creates a `release` folder containing the compiled SWF.
 
 ## Testing
-Testing is currently performed in [divine-player](https://github.com/cameronhunter/divine-player) – hopefully this will change soon.
+
+```shell
+grunt test
+```
+
+This starts a [local server](http://localhost:9001) which you can point devices to.
+
+Integration testing is currently performed in [divine-player](https://github.com/cameronhunter/divine-player).
