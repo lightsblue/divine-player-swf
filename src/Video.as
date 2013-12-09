@@ -74,7 +74,7 @@ package {
           stream.client.onMetaData = function(infoObject:Object): void {
             if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number) {
               var onDuration: String = loaderInfo.parameters.onDuration;
-              ExternalInterface.call(onDuration, infoObject["duration"]);
+              ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onDuration"].join("_"), infoObject["duration"]);
             }
           };
           stream.soundTransform = new SoundTransform(muted ? 0 : 1);
