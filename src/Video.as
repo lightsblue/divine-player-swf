@@ -65,6 +65,13 @@ package {
       return muted;
     }
 
+    private function throwError(code: int, description: String): void {
+      var onError: String = loaderInfo.parameters.onError;
+      if (onError) {
+        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
+      }
+    }
+
     private function netStatusHandler(e: NetStatusEvent): void {
       switch (e.info.code) {
         case "NetConnection.Connect.Success":
@@ -92,6 +99,14 @@ package {
         case "NetStream.Play.Stop":
           if (loop) stream.seek(0);
           break;
+        case "NetConnection.Connect.Failed":
+        case "NetStream.Play.StreamNotFound":
+           throwError(e.info.code, e.info.description);
+           break;
+         default:
+           if (e.info.level == "error") {
+             throwError(e.info.code, e.info.description);
+           }
       }
     }
 
