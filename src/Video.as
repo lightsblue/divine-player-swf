@@ -67,9 +67,13 @@ package {
 
     private function throwError(code: int, description: String): void {
       var onError: String = loaderInfo.parameters.onError;
-      if (onError) {
+      if (onError && isSafe(ExternalInterface.objectID)) {
         ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
       }
+    }
+
+    private function isSafe(value: String): Boolean {
+      return /^[0-9A-Z]+$/i.test(value);
     }
 
     private function netStatusHandler(e: NetStatusEvent): void {
@@ -79,7 +83,7 @@ package {
           stream.bufferTime = 0.5;
           stream.client = {};
           stream.client.onMetaData = function(infoObject:Object): void {
-            if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number) {
+            if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number && isSafe(ExternalInterface.objectID)) {
               var onDuration: String = loaderInfo.parameters.onDuration;
               ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onDuration"].join("_"), infoObject["duration"]);
             }
@@ -109,7 +113,5 @@ package {
            }
       }
     }
-
   }
-
 }
