@@ -5,6 +5,7 @@ package {
   import flash.net.NetConnection;
   import flash.net.NetStream;
   import flash.external.ExternalInterface;
+  import flash.events.Event;
 
   public class Video extends flash.media.Video {
 
@@ -13,6 +14,8 @@ package {
     private var loop: Boolean;
     private var muted: Boolean;
     private var playing: Boolean;
+    private var videoDuration: Number;
+    private var streamTime;
 
     private var stream: NetStream;
     private var connection: NetConnection = new NetConnection();
@@ -27,17 +30,40 @@ package {
 
       connection.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
       connection.connect(null);
+
+      this.addEventListener(Event.ENTER_FRAME, function (e:Event): void {
+        if (!stream) { return; }
+        if (!isPaused() && stream.time != streamTime) {
+          streamTime = stream.time;
+          externalCall("onTimeUpdate", "onTimeUpdate", streamTime);
+        }
+      });
     }
 
     public function play(): void {
       playing = true;
       stream.resume();
+      externalCall("onPlay", "onPlay", null);
     }
 
     public function pause(): void {
       playing = false;
       stream.pause();
+      externalCall("onPause", "onPause", null);
     }
+
+    public function seekForward () {
+
+      var time = stream.time + 5;
+      if (videoDuration) {
+        time = Math.min(time, videoDuration - .1);
+      }
+      stream.seek(time);
+    };
+
+    public function seekBack () {
+      stream.seek(stream.time - 1);
+    };
 
     public function currentTime(offset:Number): void {
       stream.seek(offset);
@@ -54,21 +80,29 @@ package {
     public function mute(): void {
       muted = true;
       stream.soundTransform = new SoundTransform(0);
+      externalCall("onVolumeChange", "onVolumeChange", null);
     }
 
     public function unmute(): void {
       muted = false;
       stream.soundTransform = new SoundTransform(1);
+      externalCall("onVolumeChange", "onVolumeChange", null);
     }
 
     public function isMuted(): Boolean {
       return muted;
     }
 
+    private function externalCall (key, code, description): void {
+      if (key && isSafe(ExternalInterface.objectID)) {
+        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, key].join("_"), code, description);
+      }
+    }
+
     private function throwError(code: int, description: String): void {
       var onError: String = loaderInfo.parameters.onError;
-      if (onError && isSafe(ExternalInterface.objectID)) {
-        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
+      if (onError) {
+        externalCall("onError", code, description);
       }
     }
 
@@ -85,7 +119,8 @@ package {
           stream.client.onMetaData = function(infoObject:Object): void {
             if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number && isSafe(ExternalInterface.objectID)) {
               var onDuration: String = loaderInfo.parameters.onDuration;
-              ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onDuration"].join("_"), infoObject["duration"]);
+              videoDuration = infoObject["duration"];
+              externalCall("onDuration", infoObject["duration"], null);
             }
           };
           stream.soundTransform = new SoundTransform(muted ? 0 : 1);
