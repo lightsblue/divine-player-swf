@@ -135,7 +135,11 @@ package {
             pause();
           }
           break;
+        case "NetStream.Play.Start":
+          externalCall("onPlay", "onPlay", null);
+          break;
         case "NetStream.Play.Stop":
+          externalCall("onEnded", "onEnded", null);
           if (loop) stream.seek(0);
           break;
         case "NetConnection.Connect.Failed":
