@@ -35,7 +35,7 @@ package {
         if (!stream) { return; }
         if (!isPaused() && stream.time != streamTime) {
           streamTime = stream.time;
-          externalCall("onTimeUpdate", "onTimeUpdate", streamTime);
+          externalCall("onTimeUpdate", streamTime);
         }
       });
     }
@@ -43,13 +43,13 @@ package {
     public function play(): void {
       playing = true;
       stream.resume();
-      externalCall("onPlay", "onPlay", null);
+      externalCall("onPlay", null);
     }
 
     public function pause(): void {
       playing = false;
       stream.pause();
-      externalCall("onPause", "onPause", null);
+      externalCall("onPause", null);
     }
 
     public function seekForward () {
@@ -80,29 +80,31 @@ package {
     public function mute(): void {
       muted = true;
       stream.soundTransform = new SoundTransform(0);
-      externalCall("onVolumeChange", "onVolumeChange", null);
+      externalCall("onVolumeChange", null);
     }
 
     public function unmute(): void {
       muted = false;
       stream.soundTransform = new SoundTransform(1);
-      externalCall("onVolumeChange", "onVolumeChange", null);
+      externalCall("onVolumeChange", null);
     }
 
     public function isMuted(): Boolean {
       return muted;
     }
 
-    private function externalCall (key, code, description): void {
+    private function externalCall (key, value): void {
       if (key && isSafe(ExternalInterface.objectID)) {
-        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, key].join("_"), code, description);
+        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, key].join("_"), value);
       }
     }
 
     private function throwError(code: int, description: String): void {
       var onError: String = loaderInfo.parameters.onError;
       if (onError) {
-        externalCall("onError", code, description);
+        if (isSafe(ExternalInterface.objectID)) {
+          ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
+        }
       }
     }
 
@@ -120,7 +122,7 @@ package {
             if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number && isSafe(ExternalInterface.objectID)) {
               var onDuration: String = loaderInfo.parameters.onDuration;
               videoDuration = infoObject["duration"];
-              externalCall("onDuration", infoObject["duration"], null);
+              externalCall("onDuration", infoObject["duration"]);
             }
           };
           stream.soundTransform = new SoundTransform(muted ? 0 : 1);
@@ -136,10 +138,10 @@ package {
           }
           break;
         case "NetStream.Play.Start":
-          externalCall("onPlay", "onPlay", null);
+          externalCall("onPlay", null);
           break;
         case "NetStream.Play.Stop":
-          externalCall("onEnded", "onEnded", null);
+          externalCall("onEnded", null);
           if (loop) stream.seek(0);
           break;
         case "NetConnection.Connect.Failed":
