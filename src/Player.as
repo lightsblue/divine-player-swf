@@ -9,18 +9,21 @@ package {
   public class Player extends Sprite {
 
     public function Player() {
+      var zIndex = 0;
       stage.align = StageAlign.TOP_LEFT;
       stage.scaleMode = StageScaleMode.NO_SCALE;
-
       Security.allowDomain("*");
       Security.allowInsecureDomain("*");
 
-
-      var poster: Image = new Image(
-        loaderInfo.parameters.poster,
-        stage.stageWidth,
-        stage.stageHeight
-      );
+      if (loaderInfo.parameters.poster) {
+        var poster: Image = new Image(
+          loaderInfo.parameters.poster,
+          stage.stageWidth,
+          stage.stageHeight
+        );
+        addChildAt(poster, zIndex);
+        zIndex++;
+      }
 
       var video: Video = new Video(
         loaderInfo.parameters.video,
@@ -31,8 +34,7 @@ package {
         loaderInfo.parameters.muted == "true"
       );
 
-      addChildAt(poster, 0);
-      addChildAt(video, 1);
+      addChildAt(video, zIndex);
 
       registerJavaScriptAPI(video);
 
