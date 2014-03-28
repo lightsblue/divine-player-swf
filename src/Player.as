@@ -48,8 +48,6 @@ package {
     private function registerJavaScriptAPI(video: Video): void {
       ExternalInterface.addCallback("divinePlay", video.play);
       ExternalInterface.addCallback("divinePause", video.pause);
-      ExternalInterface.addCallback("seekForward", video.seekForward);
-      ExternalInterface.addCallback("seekBack", video.seekBack);
       ExternalInterface.addCallback("divinePaused", video.isPaused);
       ExternalInterface.addCallback("divineMute", video.mute);
       ExternalInterface.addCallback("divineUnmute", video.unmute);

@@ -52,19 +52,6 @@ package {
       externalCall("onPause", null);
     }
 
-    public function seekForward () {
-
-      var time = stream.time + 5;
-      if (videoDuration) {
-        time = Math.min(time, videoDuration - .1);
-      }
-      stream.seek(time);
-    };
-
-    public function seekBack () {
-      stream.seek(stream.time - 1);
-    };
-
     public function currentTime(offset:Number): void {
       stream.seek(offset);
     }
