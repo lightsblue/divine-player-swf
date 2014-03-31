@@ -15,7 +15,7 @@ package {
     private var muted: Boolean;
     private var playing: Boolean;
     private var videoDuration: Number;
-    private var streamTime;
+    private var streamTime: Number;
 
     private var stream: NetStream;
     private var connection: NetConnection = new NetConnection();
@@ -88,10 +88,8 @@ package {
 
     private function throwError(code: int, description: String): void {
       var onError: String = loaderInfo.parameters.onError;
-      if (onError) {
-        if (isSafe(ExternalInterface.objectID)) {
-          ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
-        }
+      if (onError && isSafe(ExternalInterface.objectID)) {
+        ExternalInterface.call(["divinePlayer", ExternalInterface.objectID, "onError"].join("_"), code, description);
       }
     }
 
