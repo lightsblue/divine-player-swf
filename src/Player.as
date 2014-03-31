@@ -5,6 +5,7 @@ package {
   import flash.display.StageScaleMode;
   import flash.external.ExternalInterface;
   import flash.system.Security;
+  import flash.events.Event;
 
   public class Player extends Sprite {
 
@@ -14,7 +15,6 @@ package {
 
       Security.allowDomain("*");
       Security.allowInsecureDomain("*");
-
 
       var poster: Image = new Image(
         loaderInfo.parameters.poster,
@@ -36,6 +36,11 @@ package {
 
       registerJavaScriptAPI(video);
 
+      function stageResizeHandler(event:Event = null):void{
+         video.width = stage.stageWidth;
+         video.height = stage.stageHeight;
+      }
+      stage.addEventListener(Event.RESIZE, stageResizeHandler);
       onReady();
     }
 
