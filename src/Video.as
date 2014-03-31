@@ -14,7 +14,6 @@ package {
     private var loop: Boolean;
     private var muted: Boolean;
     private var playing: Boolean;
-    private var videoDuration: Number;
     private var streamTime: Number;
 
     private var stream: NetStream;
@@ -106,7 +105,6 @@ package {
           stream.client.onMetaData = function(infoObject:Object): void {
             if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number && isSafe(ExternalInterface.objectID)) {
               var onDuration: String = loaderInfo.parameters.onDuration;
-              videoDuration = infoObject["duration"];
               externalCall("onDuration", infoObject["duration"]);
             }
           };
