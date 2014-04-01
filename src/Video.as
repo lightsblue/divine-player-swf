@@ -32,7 +32,7 @@ package {
 
       this.addEventListener(Event.ENTER_FRAME, function (e:Event): void {
         if (!stream) { return; }
-        if (!isPaused() && stream.time != streamTime) {
+        if (stream.time != streamTime) {
           streamTime = stream.time;
           externalCall("onTimeUpdate", streamTime);
         }
