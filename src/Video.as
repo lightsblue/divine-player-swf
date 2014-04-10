@@ -15,7 +15,6 @@ package {
     private var muted: Boolean;
     private var playing: Boolean;
     private var streamTime: Number;
-
     private var stream: NetStream;
     private var connection: NetConnection = new NetConnection();
 
@@ -96,6 +95,20 @@ package {
       return /^[0-9A-Z]+$/i.test(value);
     }
 
+    private function sizeVideo (videoWidth: int, videoHeight: int): void {
+      if (videoWidth && videoHeight) {
+        var videoAspectRatio = videoHeight/videoWidth;
+        var currentAspectRatio = this.height/this.width;
+        if (currentAspectRatio > videoAspectRatio) { //video has top/bottom border
+          this.height = videoWidth*videoAspectRatio;
+          this.y = (stage.stageHeight - this.height)/2;
+        } else { //video has side border
+          this.width = this.height/videoAspectRatio;
+          this.x = (stage.stageWidth - this.width)/2;
+        }
+      }
+    }
+
     private function netStatusHandler(e: NetStatusEvent): void {
       switch (e.info.code) {
         case "NetConnection.Connect.Success":
@@ -103,6 +116,7 @@ package {
           stream.bufferTime = 0.5;
           stream.client = {};
           stream.client.onMetaData = function(infoObject:Object): void {
+            sizeVideo(infoObject.width, infoObject.height);
             if (infoObject.hasOwnProperty("duration") && infoObject["duration"] is Number && isSafe(ExternalInterface.objectID)) {
               var onDuration: String = loaderInfo.parameters.onDuration;
               externalCall("onDuration", infoObject["duration"]);
