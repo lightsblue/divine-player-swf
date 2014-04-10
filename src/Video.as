@@ -97,15 +97,11 @@ package {
 
     private function sizeVideo (videoWidth: int, videoHeight: int): void {
       if (videoWidth && videoHeight) {
-        var videoAspectRatio = videoHeight/videoWidth;
-        var currentAspectRatio = this.height/this.width;
-        if (currentAspectRatio > videoAspectRatio) { //video has top/bottom border
-          this.height = videoWidth*videoAspectRatio;
-          this.y = (stage.stageHeight - this.height)/2;
-        } else { //video has side border
-          this.width = this.height/videoAspectRatio;
-          this.x = (stage.stageWidth - this.width)/2;
-        }
+        var scale = Math.min(this.height/videoHeight, this.width/videoWidth);
+        this.height = videoHeight*scale;
+        this.width = videoWidth*scale;
+        this.y = (stage.stageHeight - this.height)/2;
+        this.x = (stage.stageWidth - this.width)/2;
       }
     }
 
